@@ -50,7 +50,9 @@ public class DashboardController {
             DashboardView ventana = new DashboardView(
                     dashboard.getWidgets()
             );
-
+            ventana.alActualizar(e -> {
+         ventana.mostrarWidgets(dashboard.getWidgets());
+});
             ventana.setVisible(true);
         });
     }

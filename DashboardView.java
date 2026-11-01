@@ -1,14 +1,12 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.util.List;
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 public class DashboardView extends JFrame {
+    private JPanel contenedor;
+    private JButton botonActualizar;
 
     public DashboardView(List<Renderizable> widgets) {
         setTitle("Dashboard de widgets");
@@ -17,29 +15,36 @@ public class DashboardView extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
-        JLabel titulo = new JLabel(
-                "Mi Dashboard",
-                SwingConstants.CENTER
-        );
+        JPanel barraSuperior = new JPanel();
+        barraSuperior.add(new JLabel("Mi Dashboard"));
 
-        titulo.setBorder(
-                BorderFactory.createEmptyBorder(15, 10, 5, 10)
-        );
+        botonActualizar = new JButton("Actualizar");
+        barraSuperior.add(botonActualizar);
 
-        add(titulo, BorderLayout.NORTH);
+        add(barraSuperior, BorderLayout.NORTH);
 
-        JPanel contenedor = new JPanel(
-                new GridLayout(0, 1, 10, 10)
-        );
-
+        contenedor = new JPanel(new GridLayout(0, 1, 10, 10));
         contenedor.setBorder(
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         );
+
+        add(new JScrollPane(contenedor), BorderLayout.CENTER);
+
+        mostrarWidgets(widgets);
+    }
+
+    public void alActualizar(ActionListener accion) {
+        botonActualizar.addActionListener(accion);
+    }
+
+    public void mostrarWidgets(List<Renderizable> widgets) {
+        contenedor.removeAll();
 
         for (Renderizable widget : widgets) {
             contenedor.add(widget.obtenerVista());
         }
 
-        add(new JScrollPane(contenedor), BorderLayout.CENTER);
+        contenedor.revalidate();
+        contenedor.repaint();
     }
 }
